@@ -62,14 +62,18 @@ export const TestText = ({
 
   const [wordsCorrect, setWordsCorrect] = useState(new Set());
   const [wordsInCorrect, setWordsInCorrect] = useState(new Set());
-  const [inputWordsHistory, setInputWordsHistory] = useState({});
+  const [inputWordsHistory, setInputWordsHistory] = useState<{
+    [key: number | string]: string;
+  }>({});
 
   const [rawKeyStrokes, setRawKeyStrokes] = useState(0);
   const [wpmKeyStrokes, setWpmKeyStrokes] = useState(0);
   const [wpm, setWpm] = useState(0);
   const [statsCharCount, setStatsCharCount] = useState<number[]>([]);
 
-  const [history, setHistory] = useState({});
+  const [history, setHistory] = useState<{
+    [key: number | string]: string | number | boolean | undefined;
+  }>({});
   const keyString = useMemo(
     () => `${currWordIndex}.${currCharIndex}`,
     [currWordIndex, currCharIndex],

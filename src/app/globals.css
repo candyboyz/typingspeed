@@ -31,27 +31,27 @@ body {
 }
 
 .caret-char-left {
-  @apply border-l border-l-blue-500 border-r border-r-transparent;
+  @apply border-l border-l-blue-500 border-r border-r-transparent animate-blink-left-caret;
 }
 
 .caret-char-left-start {
-  @apply border-l border-r border-r-transparent animate-blink-caret transition-all;
+  @apply border-l border-r border-r-transparent animate-blink-left-caret transition-all;
 }
 
 .caret-char-right {
-  @apply border-r border-r-blue-500 border-l border-l-transparent;
+  @apply border-r border-r-blue-500 border-l border-l-transparent animate-blink-right-caret;
 }
 
 .caret-char-right-correct {
-  @apply border-r border-r-blue-500 border-l border-l-transparent dark:text-white text-black;
+  @apply border-r border-r-blue-500 border-l border-l-transparent dark:text-white text-black animate-blink-right-caret;
 }
 
 .caret-char-right-error {
-  @apply border-r border-r-blue-500 border-l border-l-transparent dark:text-red-500 text-red-500;
+  @apply border-r border-r-blue-500 border-l border-l-transparent dark:text-red-500 text-red-500 animate-blink-right-caret;
 }
 
 .caret-extra-char-right-error {
-  @apply border-r border-r-blue-500 border-l border-l-transparent dark:text-red-500 text-red-500;
+  @apply border-r border-r-blue-500 border-l border-l-transparent dark:text-red-500 text-red-500 animate-blink-right-caret;
 }
 
 .hidden-input {

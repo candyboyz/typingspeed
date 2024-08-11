@@ -4,6 +4,8 @@ import { cn } from "@/shared/lib/utils";
 import { wordsGenerator } from "@/shared/lib/wordsGenerator";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { TestStats } from "./test-stats";
+import { TestSettings } from "./test-settings";
+import { useConfigStore } from "@/store/store-config";
 
 interface TestTextProps {
   isFocusedMode: boolean;
@@ -11,15 +13,23 @@ interface TestTextProps {
   handleInputFocus: () => void;
 }
 
-const PACING_PULSE = "pulse";
+const PACING_UNDERLINE = "underline";
 const PACING_CARET = "caret";
 
-export const TestText = ({
+const TestText = ({
   isFocusedMode,
   textInputRef,
   handleInputFocus,
 }: TestTextProps) => {
-  const [pacingStyle, setPacingStyle] = useState(PACING_PULSE);
+  const {
+    time,
+    countWords,
+    pacing,
+    language,
+    difficult,
+    numbers,
+    punctuation,
+  } = useConfigStore();
 
   const [incorrectCharsCount, setIncorrectCharsCount] = useState(0);
 
@@ -27,10 +37,14 @@ export const TestText = ({
 
   const [isCapsLock, setIsCapsLock] = useState(false);
 
-  const [openRestart, setOpenRestart] = useState(false);
-
   const [wordsDict, setWordsDict] = useState(() => {
-    return wordsGenerator(200, "normal", "ENGLISH_MODE", false, false);
+    return wordsGenerator(
+      countWords,
+      difficult,
+      language,
+      numbers,
+      punctuation,
+    );
   });
 
   const words = useMemo(() => wordsDict.map((e) => e.val), [wordsDict]);
@@ -44,7 +58,7 @@ export const TestText = ({
     [words],
   );
 
-  const [countDown, setCountDown] = useState(60);
+  const [countDown, setCountDown] = useState(time);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   const [status, setStatus] = useState("waiting");
@@ -81,13 +95,13 @@ export const TestText = ({
   const [currChar, setCurrChar] = useState("");
 
   useEffect(() => {
-    if (currWordIndex === 200 - 1) {
+    if (currWordIndex === countWords - 1) {
       const generate = wordsGenerator(
-        200,
-        "normal",
-        "ENGLISH_MODE",
-        false,
-        false,
+        countWords,
+        difficult,
+        language,
+        numbers,
+        punctuation,
       );
       setWordsDict((prev) => [...prev, ...generate]);
     }
@@ -163,7 +177,7 @@ export const TestText = ({
             checkPrev();
             setStatus("finished");
 
-            return 60;
+            return time;
           } else {
             return prev - 1;
           }
@@ -215,8 +229,8 @@ export const TestText = ({
       return;
     }
 
-    if (wpmKeyStrokes !== 0 && 60 - countDown !== 0) {
-      const currWpm = (wpmKeyStrokes / 5 / (60 - countDown)) * 60.0;
+    if (wpmKeyStrokes !== 0 && time - countDown !== 0) {
+      const currWpm = (wpmKeyStrokes / 5 / (time - countDown)) * 60.0;
       setWpm(currWpm);
     }
 
@@ -325,7 +339,7 @@ export const TestText = ({
   const getWordClassName = (wordIdx: number) => {
     if (wordsInCorrect.has(wordIdx)) {
       if (currWordIndex === wordIdx) {
-        if (pacingStyle === PACING_PULSE) {
+        if (pacing === PACING_UNDERLINE) {
           return "word error-word active-word";
         } else {
           return "word error-word active-word-no-pulse";
@@ -334,7 +348,7 @@ export const TestText = ({
       return "word error-word";
     } else {
       if (currWordIndex === wordIdx) {
-        if (pacingStyle === PACING_PULSE) {
+        if (pacing === PACING_UNDERLINE) {
           return "word active-word";
         } else {
           return "word active-word-no-pulse";
@@ -351,7 +365,7 @@ export const TestText = ({
 
     if (char !== currChar && char !== undefined)
       return setIncorrectCharsCount((prev) => prev + 1);
-  }, [currChar, status, currCharIndex]);
+  }, [currChar, status, currCharIndex, currWordIndex]);
 
   useEffect(() => {
     // console.log("incorrectCharsCount:", incorrectCharsCount);
@@ -365,7 +379,7 @@ export const TestText = ({
   ) => {
     const keyString = wordIdx + "." + charIdx;
     if (
-      pacingStyle === PACING_CARET &&
+      pacing === PACING_CARET &&
       wordIdx === currWordIndex &&
       charIdx === currCharIndex + 1 &&
       status !== "finished"
@@ -374,7 +388,7 @@ export const TestText = ({
     }
     if (history[keyString] === true) {
       if (
-        pacingStyle === PACING_CARET &&
+        pacing === PACING_CARET &&
         wordIdx === currWordIndex &&
         word.length - 1 === currCharIndex &&
         charIdx === currCharIndex &&
@@ -386,7 +400,7 @@ export const TestText = ({
     }
     if (history[keyString] === false) {
       if (
-        pacingStyle === PACING_CARET &&
+        pacing === PACING_CARET &&
         wordIdx === currWordIndex &&
         word.length - 1 === currCharIndex &&
         charIdx === currCharIndex &&
@@ -420,41 +434,6 @@ export const TestText = ({
     }
   };
 
-  const getDifficultyButtonClassName = (buttonDifficulty: string) => {
-    if ("normal" === buttonDifficulty) {
-      return "active-button";
-    }
-    return "inactive-button";
-  };
-
-  const getAddOnButtonClassName = (addon: boolean) => {
-    if (addon) {
-      return "active-button";
-    }
-    return "inactive-button";
-  };
-
-  const getPacingStyleButtonClassName = (buttonPacingStyle: string) => {
-    if ("carret" === buttonPacingStyle) {
-      return "active-button";
-    }
-    return "inactive-button";
-  };
-
-  const getTimerButtonClassName = (buttonTimerCountDown: number) => {
-    if (60 === buttonTimerCountDown) {
-      return "active-button";
-    }
-    return "inactive-button";
-  };
-
-  const getLanguageButtonClassName = (buttonLanguage: string) => {
-    if ("ENGLISH_MODE" === buttonLanguage) {
-      return "active-button";
-    }
-    return "inactive-button";
-  };
-
   const startIndex = 0;
 
   const endIndex = startIndex + itemsToRender;
@@ -467,69 +446,108 @@ export const TestText = ({
     if (distanceToEnd === 20) {
       setItemsToRender((prev) => prev + 20);
     }
-  }, [currWordIndex]);
+  }, [currWordIndex, currentWords]);
+
+  const reset = (isRedo: boolean) => {
+    setStatus("waiting");
+    if (!isRedo) {
+      setWordsDict(
+        wordsGenerator(countWords, difficult, language, numbers, punctuation),
+      );
+    }
+
+    setCountDown(time);
+    clearInterval(intervalId!);
+    setWpm(0);
+    setRawKeyStrokes(0);
+    setWpmKeyStrokes(0);
+    setCurrInput("");
+    setPrevInput("");
+    setIntervalId(null);
+    setCurrWordIndex(0);
+    setCurrCharIndex(-1);
+    setCurrChar("");
+    setHistory({});
+    setInputWordsHistory({});
+    setWordsCorrect(new Set());
+    setWordsInCorrect(new Set());
+    textInputRef.current?.focus();
+    wordsSpanRef[0].current?.scrollIntoView();
+  };
+
+  useEffect(() => {
+    reset(false);
+  }, [countWords, language, difficult, numbers, punctuation]);
+
+  useEffect(() => {
+    reset(true);
+  }, [time]);
 
   return (
-    <section
-      className="flex flex-col justify-center"
-      onClick={handleInputFocus}
-      style={{ height: status !== "finished" ? "80%" : "auto" }}>
-      <div className="px-2 flex flex-col gap-2">
-        <TestStats
-          status={status}
-          wpm={wpm}
-          countDown={countDown}
-          countDownConstant={60}
-          statsCharCount={statsCharCount}
-          rawKeyStrokes={rawKeyStrokes}
-          wpmKeyStrokes={wpmKeyStrokes}
-          setIncorrectCharsCount={setIncorrectCharsCount}
-          incorrectCharsCount={incorrectCharsCount}
-        />
-      </div>
-      <div
-        className="block max-w-[1000px] h-[140px] overflow-hidden m-[0_auto] relative w-full"
-        style={{
-          visibility: status === "finished" ? "hidden" : "visible",
-          marginTop: status === "waiting" ? "64px" : "",
-        }}>
-        <div className="text-[28px] dark:text-white/[0.3] text-black/[0.3] flex flex-wrap w-full items-center select-none">
-          {currentWords.map((word, i) => {
-            return (
-              <span
-                key={i}
-                ref={wordsSpanRef[i]}
-                className={cn(
-                  "mx-[5px] flex pr-[2px] border-b border-b-transparent border-t border-t-transparent scroll-m-1",
-                  getWordClassName(i),
-                )}>
-                {word.split("").map((char: string, idx: number) => (
-                  <span
-                    key={"word" + idx}
-                    className={getCharClassName(i, idx, char, word)}>
-                    {char}
-                  </span>
-                ))}
-                {getExtraCharsDisplay(word, i)}
-              </span>
-            );
-          })}
+    <>
+      <section
+        className="flex flex-col justify-center"
+        onClick={handleInputFocus}
+        style={{ height: status !== "finished" ? "40%" : "auto" }}>
+        <div className="px-2 flex max-w-[1000px] w-full mx-auto flex-col gap-2">
+          <TestStats
+            status={status}
+            wpm={wpm}
+            countDown={countDown}
+            countDownConstant={time}
+            statsCharCount={statsCharCount}
+            rawKeyStrokes={rawKeyStrokes}
+            wpmKeyStrokes={wpmKeyStrokes}
+            setIncorrectCharsCount={setIncorrectCharsCount}
+            incorrectCharsCount={incorrectCharsCount}
+          />
         </div>
-      </div>
-      <div className="stats"></div>
-      <input
-        key="hidden-input"
-        ref={textInputRef}
-        type="text"
-        className="hidden-input"
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
-        value={currInput}
-        onChange={updateInput}
-      />
-    </section>
+        <div
+          className="block max-w-[1000px] h-[140px] overflow-hidden m-[0_auto] relative w-full"
+          style={{
+            visibility: status === "finished" ? "hidden" : "visible",
+            marginTop: status === "waiting" ? "64px" : "",
+          }}>
+          <div className="text-[28px] dark:text-white/[0.3] text-black/[0.3] flex flex-wrap w-full items-center select-none">
+            {currentWords.map((word, i) => {
+              return (
+                <span
+                  key={i}
+                  ref={wordsSpanRef[i]}
+                  className={cn(
+                    "mx-[5px] flex pr-[2px] border-b border-b-transparent border-t border-t-transparent scroll-m-1",
+                    getWordClassName(i),
+                  )}>
+                  {word.split("").map((char: string, idx: number) => (
+                    <span
+                      key={"word" + idx}
+                      className={getCharClassName(i, idx, char, word)}>
+                      {char}
+                    </span>
+                  ))}
+                  {getExtraCharsDisplay(word, i)}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+        <input
+          key="hidden-input"
+          ref={textInputRef}
+          type="text"
+          className="hidden-input"
+          onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
+          value={currInput}
+          onChange={updateInput}
+        />
+      </section>
+      <TestSettings reset={reset} />
+    </>
   );
 };
+
+export default TestText;
 
 // export const TestText = () => {
 //   const selectText =

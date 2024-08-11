@@ -2,6 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 
+const initialTypingTestHistory = [
+  {
+    wpm: 0,
+    rawWpm: 0,
+    time: 0,
+    error: 0,
+  },
+];
+
 interface TestStatsProps {
   status: string;
   wpm: number;
@@ -32,15 +41,6 @@ export const TestStats = ({
   const roundedRawWpm = Math.round(
     (rawKeyStrokes / 5 / (countDownConstant - countDown)) * 60.0,
   );
-
-  const initialTypingTestHistory = [
-    {
-      wpm: 0,
-      rawWpm: 0,
-      time: 0,
-      error: 0,
-    },
-  ];
 
   const [typingTestHistory, setTypingTestHistory] = useState(
     initialTypingTestHistory,
@@ -108,7 +108,7 @@ export const TestStats = ({
     <>
       {status !== "finished" && status !== "waiting" && (
         <>
-          <h3 className="text-blue-500 text-xl">{countDown} s</h3>
+          <h3 className="text-blue-500 text-xl">{countDown}</h3>
           <h3 className="text-blue-500 text-xl">WPM: {Math.round(wpm)}</h3>
         </>
       )}

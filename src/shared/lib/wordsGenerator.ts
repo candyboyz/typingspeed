@@ -8,7 +8,7 @@ import EnglishWords from "@/app/_assets/english-words.json";
 
 const COMMON_WORDS = JSON.parse(JSON.stringify(EnglishWords));
 
-const ENGLISH_MODE = "ENGLISH_MODE";
+const ENGLISH_MODE = "english";
 const DEFAULT_DIFFICULTY = "normal";
 const DEFAULT_WORDS_COUNT = 200;
 

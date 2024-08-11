@@ -1,20 +1,27 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      keyframes: {
+        "blink-caret": {
+          "0%, 100%": { "border-left-color": "#60a5fa" },
+          "50%": { "border-left-color": "#ffffff4d" },
+        },
+        "blink-underline": {
+          "0%, 100%": { "border-bottom": "1px solid #60a5fa" },
+          "50%": { "border-bottom": "1px solid #ffffff4d" },
+        },
+      },
+      animation: {
+        "blink-caret": "blink-caret 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "blink-underline":
+          "blink-underline 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
     },
   },
+  darkMode: "class",
   plugins: [],
 };
 export default config;

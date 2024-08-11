@@ -1,113 +1,621 @@
+"use client";
+
 import Image from "next/image";
+import { User, Settings } from "lucide-react";
+import { TestText } from "@/components/test-text";
+import { useCallback, useRef, useState } from "react";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+const HomePage = () => {
+  const [isFocusedMode, setIsFocusedMode] = useState(true);
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+  const textInputRef = useRef<HTMLInputElement>(null);
+  const focusTextInput = useCallback(
+    () => textInputRef.current && textInputRef.current.focus(),
+    [textInputRef],
   );
-}
+
+  return (
+    <>
+      <header className="h-[80px] max-w-[1440px] mx-auto w-full flex items-center justify-between px-4">
+        <div className="flex items-center gap-2">
+          <Image src="logo.svg" width={60} height={45} alt="Typing Speed" />
+          <h1 className="font-bold text-2xl">typingspeed</h1>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            className="dark:hover:bg-white/[0.05] p-1.5 rounded-full transition-all text-zinc-600 hover:text-current"
+            title="Настройки">
+            <Settings size={20} />
+          </button>
+          <button
+            className="dark:hover:bg-white/[0.05] p-1.5 rounded-full transition-all text-zinc-600 hover:text-current"
+            title="Профиль">
+            <User size={20} />
+          </button>
+        </div>
+      </header>
+      <main className="w-full h-[calc(100vh-80px)] max-w-[1440px] mx-auto px-4 flex justify-center">
+        <TestText
+          textInputRef={textInputRef}
+          isFocusedMode={isFocusedMode}
+          handleInputFocus={focusTextInput}
+        />
+      </main>
+    </>
+  );
+};
+
+export default HomePage;
+
+// const wordsArray = [
+//   "здравствуй",
+//   "мир",
+//   "кот",
+//   "собака",
+//   "дерево",
+//   "лес",
+//   "море",
+//   "небо",
+//   "солнце",
+//   "луна",
+//   "звезда",
+//   "дождь",
+//   "снег",
+//   "ветер",
+//   "земля",
+//   "гора",
+//   "река",
+//   "озеро",
+//   "птица",
+//   "рыба",
+//   "цветок",
+//   "трава",
+//   "дом",
+//   "улица",
+//   "машина",
+//   "велосипед",
+//   "самолет",
+//   "поезд",
+//   "корабль",
+//   "человек",
+//   "ребенок",
+//   "женщина",
+//   "мужчина",
+//   "старик",
+//   "девочка",
+//   "мальчик",
+//   "учитель",
+//   "ученик",
+//   "друг",
+//   "враг",
+//   "любовь",
+//   "радость",
+//   "грусть",
+//   "страх",
+//   "смех",
+//   "слезы",
+//   "жизнь",
+//   "смерть",
+//   "время",
+//   "вечность",
+//   "день",
+//   "ночь",
+//   "утро",
+//   "вечер",
+//   "секунда",
+//   "минута",
+//   "час",
+//   "год",
+//   "век",
+//   "миллион",
+//   "счастье",
+//   "беда",
+//   "тревога",
+//   "мир",
+//   "война",
+//   "победа",
+//   "поражение",
+//   "работа",
+//   "отдых",
+//   "праздник",
+//   "игра",
+//   "музыка",
+//   "книга",
+//   "фильм",
+//   "картина",
+//   "театр",
+//   "песня",
+//   "танец",
+//   "спорт",
+//   "путешествие",
+//   "еда",
+//   "вода",
+//   "хлеб",
+//   "мясо",
+//   "овощи",
+//   "фрукты",
+//   "сладости",
+//   "напитки",
+//   "чай",
+//   "кофе",
+//   "город",
+//   "деревня",
+//   "страна",
+//   "мир",
+//   "континент",
+//   "океан",
+//   "завод",
+//   "офис",
+//   "школа",
+//   "университет",
+//   "болезнь",
+//   "здоровье",
+//   "лекарство",
+//   "больница",
+//   "врач",
+//   "пациент",
+//   "диагноз",
+//   "лечение",
+//   "терапия",
+//   "операция",
+//   "дружба",
+//   "любовь",
+//   "семья",
+//   "дети",
+//   "родители",
+//   "сестра",
+//   "брат",
+//   "бабушка",
+//   "дедушка",
+//   "дядя",
+//   "тетя",
+//   "деньги",
+//   "богатство",
+//   "бедность",
+//   "успех",
+//   "неудача",
+//   "талант",
+//   "работа",
+//   "карьера",
+//   "бизнес",
+//   "мечта",
+//   "цель",
+//   "желание",
+//   "надежда",
+//   "верность",
+//   "доброта",
+//   "честность",
+//   "смелость",
+//   "храбрость",
+//   "сила",
+//   "воля",
+//   "интеллект",
+//   "знание",
+//   "опыт",
+//   "мудрость",
+//   "учеба",
+//   "наука",
+//   "исследование",
+//   "техника",
+//   "технология",
+//   "компьютер",
+//   "интернет",
+//   "телефон",
+//   "соцсеть",
+//   "программа",
+//   "сайт",
+//   "блог",
+//   "видео",
+//   "фото",
+//   "игра",
+//   "проект",
+//   "команда",
+//   "лидер",
+//   "успех",
+//   "провал",
+//   "выбор",
+//   "решение",
+//   "план",
+//   "цель",
+//   "задача",
+//   "сила",
+//   "воля",
+//   "характер",
+//   "дружба",
+//   "доверие",
+//   "предательство",
+//   "зависть",
+//   "радость",
+//   "грусть",
+//   "чувство",
+//   "эмоция",
+//   "покой",
+//   "беспокойство",
+//   "уверенность",
+//   "сомнение",
+//   "страх",
+//   "смех",
+//   "улыбка",
+//   "слезы",
+//   "гнев",
+//   "ярость",
+//   "месть",
+//   "прощение",
+//   "справедливость",
+//   "обман",
+//   "правда",
+//   "ложь",
+//   "истина",
+//   "забота",
+//   "внимание",
+//   "интерес",
+//   "скука",
+//   "удовольствие",
+//   "наслаждение",
+//   "разочарование",
+//   "надежда",
+//   "вера",
+//   "духовность",
+//   "религия",
+//   "бог",
+//   "судьба",
+//   "случай",
+//   "удача",
+//   "неудача",
+//   "шанс",
+//   "выбор",
+//   "решение",
+//   "план",
+//   "мечта",
+//   "цель",
+//   "любовь",
+//   "дружба",
+//   "семья",
+//   "дети",
+//   "родители",
+//   "жена",
+//   "муж",
+//   "брат",
+//   "сестра",
+//   "родственники",
+//   "карьера",
+//   "работа",
+//   "успех",
+//   "деньги",
+//   "богатство",
+//   "бедность",
+//   "счастье",
+//   "страдание",
+//   "забота",
+//   "здоровье",
+//   "время",
+//   "жизнь",
+//   "смерть",
+//   "вечность",
+//   "минуты",
+//   "секунды",
+//   "часы",
+//   "дни",
+//   "недели",
+//   "годы",
+//   "природа",
+//   "весна",
+//   "лето",
+//   "осень",
+//   "зима",
+//   "снег",
+//   "дождь",
+//   "солнце",
+//   "луна",
+//   "звезды",
+//   "небо",
+//   "земля",
+//   "гора",
+//   "река",
+//   "озеро",
+//   "море",
+//   "океан",
+//   "лес",
+//   "дерево",
+//   "цветок",
+//   "трава",
+//   "птица",
+//   "рыба",
+//   "животное",
+//   "насекомое",
+//   "мир",
+//   "вселенная",
+//   "планета",
+//   "звезда",
+//   "галактика",
+//   "солнечная система",
+//   "космос",
+//   "атом",
+//   "молекула",
+//   "клетка",
+//   "организм",
+//   "человек",
+//   "разум",
+//   "сознание",
+//   "мысль",
+//   "идея",
+//   "теория",
+//   "практика",
+//   "опыт",
+//   "эксперимент",
+//   "наука",
+//   "техника",
+//   "технология",
+//   "инновация",
+//   "изобретение",
+//   "машина",
+//   "инструмент",
+//   "устройство",
+//   "механизм",
+//   "робот",
+//   "компьютер",
+//   "программа",
+//   "интернет",
+//   "сеть",
+//   "данные",
+//   "информация",
+//   "знание",
+//   "мудрость",
+//   "ученый",
+//   "исследователь",
+//   "изобретатель",
+//   "инженер",
+//   "доктор",
+//   "учитель",
+//   "профессор",
+//   "студент",
+//   "ученик",
+//   "школа",
+//   "университет",
+//   "академия",
+//   "исследование",
+//   "эксперимент",
+//   "наблюдение",
+//   "результат",
+//   "вывод",
+//   "знание",
+//   "умение",
+//   "навык",
+//   "опыт",
+//   "работа",
+//   "труд",
+//   "усилие",
+//   "достижение",
+//   "успех",
+//   "провал",
+//   "деньги",
+//   "капитал",
+//   "инвестиция",
+//   "бизнес",
+//   "компания",
+//   "фирма",
+//   "проект",
+//   "прибыль",
+//   "убыток",
+//   "стоимость",
+//   "цена",
+//   "товар",
+//   "услуга",
+//   "продажа",
+//   "покупка",
+//   "рынок",
+//   "экономика",
+//   "финансы",
+//   "банки",
+//   "кредит",
+//   "долг",
+//   "депозит",
+//   "валюта",
+//   "курс",
+//   "инфляция",
+//   "дефляция",
+//   "рынок",
+//   "экономика",
+//   "бизнес",
+//   "компания",
+//   "прибыль",
+//   "доход",
+//   "расход",
+//   "бюджет",
+//   "налог",
+//   "пошлина",
+//   "субсидия",
+//   "дотация",
+//   "инвестиция",
+//   "капитал",
+//   "акция",
+//   "облигация",
+//   "фонд",
+//   "банк",
+//   "страхование",
+//   "ипотека",
+//   "кредит",
+//   "долг",
+//   "банкротство",
+//   "сбережения",
+//   "пенсия",
+//   "зарплата",
+//   "доход",
+//   "расход",
+//   "инфляция",
+//   "дефляция",
+//   "налог",
+//   "бюджет",
+//   "экономия",
+//   "инвестиция",
+//   "бизнес",
+//   "компания",
+//   "прибыль",
+//   "доход",
+//   "расход",
+//   "банк",
+//   "кредит",
+//   "ипотека",
+//   "страхование",
+//   "сбережения",
+//   "пенсия",
+//   "зарплата",
+//   "доход",
+//   "расход",
+//   "инфляция",
+//   "дефляция",
+//   "налог",
+//   "бюджет",
+//   "экономия",
+//   "инвестиция",
+//   "бизнес",
+//   "компания",
+//   "прибыль",
+//   "доход",
+//   "расход",
+//   "банк",
+//   "кредит",
+//   "ипотека",
+//   "страхование",
+//   "сбережения",
+//   "пенсия",
+//   "зарплата",
+//   "доход",
+//   "расход",
+//   "инфляция",
+//   "дефляция",
+//   "налог",
+//   "бюджет",
+//   "экономия",
+//   "инвестиция",
+// ];
+
+// const randomWord = () => {
+//   const randomIndex = Math.ceil(Math.random() * wordsArray.length);
+//   return wordsArray[randomIndex - 1];
+// };
+
+// const HomePage = () => {
+//   const words = useMemo(
+//     () => [...Array(300).keys()].map(() => randomWord()),
+//     [],
+//   );
+
+//   useEffect(() => {
+//     document.querySelector("#word")?.classList.add("current");
+//     document.querySelector("#letter")?.classList.add("current");
+
+//     const handleKeyUp = (e: KeyboardEvent) => {
+//       const key = e.key;
+//       const currentWord = document.querySelector("#word.current");
+//       const currentLetter = document.querySelector("#letter.current");
+//       const expected = currentLetter?.innerHTML || " ";
+//       const isLetter = key.length === 1 && key !== " ";
+//       const isSpace = key === " ";
+
+//       console.log({ key, expected });
+
+//       if (isLetter) {
+//         if (currentLetter) {
+//           currentLetter.classList.add(
+//             key === expected ? "correct" : "incorrect",
+//           );
+
+//           currentLetter.classList.remove("current");
+
+//           if (currentLetter.nextElementSibling) {
+//             currentLetter?.nextElementSibling?.classList.add("current");
+//           }
+//         } else {
+//           const incorrectLetter = document.createElement("span");
+//           incorrectLetter.innerHTML = key;
+//           incorrectLetter.className = "letter incorrect extra";
+//           currentWord?.appendChild(incorrectLetter);
+//         }
+//       }
+
+//       if (isSpace) {
+//         if (expected !== " ") {
+//           const lettersToInvalidate = [
+//             ...document.querySelectorAll("#word.current #letter:not(.correct)"),
+//           ];
+
+//           lettersToInvalidate.forEach((letter) => {
+//             letter.classList.add("incorrect");
+//           });
+//         }
+
+//         currentWord?.classList.remove("current");
+
+//         currentWord?.nextElementSibling?.classList.add("current");
+//       }
+
+//       if (currentLetter) {
+//         currentLetter.classList.remove("current");
+
+//         currentWord?.nextElementSibling?.firstElementChild?.classList.add(
+//           "current",
+//         );
+//       }
+//     };
+
+//     document.addEventListener("keyup", handleKeyUp);
+
+//     return () => document.removeEventListener("keyup", handleKeyUp);
+//   }, []);
+
+//   return (
+//     <>
+//       <header className="h-[80px] max-w-[1440px] mx-auto w-full flex items-center justify-between px-4">
+//         <div className="flex items-center gap-2">
+//           <Image src="logo.svg" width={60} height={45} alt="Typing Speed" />
+//           <h1 className="font-bold text-2xl">typingspeed</h1>
+//         </div>
+//         <div className="flex items-center gap-2">
+//           <button
+//             className="dark:hover:bg-white/[0.05] p-1.5 rounded-full transition-all text-zinc-600 hover:text-current"
+//             title="Настройки">
+//             <Settings size={20} />
+//           </button>
+//           <button
+//             className="dark:hover:bg-white/[0.05] p-1.5 rounded-full transition-all text-zinc-600 hover:text-current"
+//             title="Профиль">
+//             <User size={20} />
+//           </button>
+//         </div>
+//       </header>
+//       <main
+//         className="w-full h-[calc(100vh-80px)] max-w-[1440px] mx-auto px-4 flex justify-center"
+//         suppressHydrationWarning>
+//         <section className="mt-40">
+//           <div
+//             className="relative h-[120px] overflow-hidden leading-9 px-12 group focus:outline-none"
+//             tabIndex={0}>
+//             {words.map((word, index) => {
+//               return (
+//                 <div
+//                   id="word"
+//                   className={`inline-block mr-[5px] text-[28px] dark:text-white/[0.2]`}
+//                   key={`random_word_${index}_${word}`}>
+//                   {word?.split("").map((letter, id) => {
+//                     return (
+//                       <span id="letter" key={`letter_${index}_${letter}`}>
+//                         {letter}
+//                       </span>
+//                     );
+//                   })}
+//                 </div>
+//               );
+//             })}
+//             <div className="cursor w-[2px] h-[26px] bg-blue-400 fixed top-[246px] left-[60px] rounded-full animate-blink group-focus:block hidden" />
+//             <div className="absolute inset-0 text-[24px] text-center tracking-widest pt-[38px] w-full dark:bg-[#1a1a1a]/[0.80] backdrop-blur-sm group-focus:bg-transparent group-focus:backdrop-blur-none transition-all group-focus:hidden">
+//               Нажмите чтобы начать
+//             </div>
+//           </div>
+//         </section>
+//       </main>
+//     </>
+//   );
+// };
+
+// export default HomePage;

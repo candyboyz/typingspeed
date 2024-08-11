@@ -2,7 +2,13 @@
 
 import { cn } from "@/shared/lib/utils";
 import { wordsGenerator } from "@/shared/lib/wordsGenerator";
-import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { TestStats } from "./test-stats";
 import { TestSettings } from "./test-settings";
 import { useConfigStore } from "@/store/store-config";
@@ -63,11 +69,6 @@ const TestText = ({
 
   const [status, setStatus] = useState("waiting");
 
-  const menuEnabled = useMemo(
-    () => !isFocusedMode || status === "finished",
-    [isFocusedMode, status],
-  );
-
   const [currInput, setCurrInput] = useState("");
 
   const [currWordIndex, setCurrWordIndex] = useState(0);
@@ -111,11 +112,19 @@ const TestText = ({
       wordsSpanRef[currWordIndex].current?.offsetLeft! <
         wordsSpanRef[currWordIndex - 1].current?.offsetLeft!
     ) {
-      wordsSpanRef[currWordIndex - 1].current?.scrollIntoView();
+      // wordsSpanRef[currWordIndex - 1].current?.scrollIntoView();
     } else {
       return;
     }
-  }, [currWordIndex, wordsSpanRef]);
+  }, [
+    currWordIndex,
+    wordsSpanRef,
+    countWords,
+    difficult,
+    language,
+    numbers,
+    punctuation,
+  ]);
 
   const start = () => {
     if (status === "finished") {
@@ -365,7 +374,7 @@ const TestText = ({
 
     if (char !== currChar && char !== undefined)
       return setIncorrectCharsCount((prev) => prev + 1);
-  }, [currChar, status, currCharIndex, currWordIndex]);
+  }, [currChar, status, currCharIndex, currWordIndex, words]);
 
   useEffect(() => {
     // console.log("incorrectCharsCount:", incorrectCharsCount);
@@ -448,32 +457,45 @@ const TestText = ({
     }
   }, [currWordIndex, currentWords]);
 
-  const reset = (isRedo: boolean) => {
-    setStatus("waiting");
-    if (!isRedo) {
-      setWordsDict(
-        wordsGenerator(countWords, difficult, language, numbers, punctuation),
-      );
-    }
+  const reset = useCallback(
+    (isRedo: boolean) => {
+      setStatus("waiting");
+      if (!isRedo) {
+        setWordsDict(
+          wordsGenerator(countWords, difficult, language, numbers, punctuation),
+        );
+      }
 
-    setCountDown(time);
-    clearInterval(intervalId!);
-    setWpm(0);
-    setRawKeyStrokes(0);
-    setWpmKeyStrokes(0);
-    setCurrInput("");
-    setPrevInput("");
-    setIntervalId(null);
-    setCurrWordIndex(0);
-    setCurrCharIndex(-1);
-    setCurrChar("");
-    setHistory({});
-    setInputWordsHistory({});
-    setWordsCorrect(new Set());
-    setWordsInCorrect(new Set());
-    textInputRef.current?.focus();
-    wordsSpanRef[0].current?.scrollIntoView();
-  };
+      setCountDown(time);
+      clearInterval(intervalId!);
+      setWpm(0);
+      setRawKeyStrokes(0);
+      setWpmKeyStrokes(0);
+      setCurrInput("");
+      setPrevInput("");
+      setIntervalId(null);
+      setCurrWordIndex(0);
+      setCurrCharIndex(-1);
+      setCurrChar("");
+      setHistory({});
+      setInputWordsHistory({});
+      setWordsCorrect(new Set());
+      setWordsInCorrect(new Set());
+      textInputRef.current?.focus();
+      wordsSpanRef[0].current?.scrollIntoView();
+    },
+    [
+      countWords,
+      difficult,
+      language,
+      numbers,
+      punctuation,
+      time,
+      intervalId,
+      textInputRef,
+      wordsSpanRef,
+    ],
+  );
 
   useEffect(() => {
     reset(false);
@@ -535,7 +557,7 @@ const TestText = ({
           key="hidden-input"
           ref={textInputRef}
           type="text"
-          className="hidden-input"
+          className="hidden-input absolute -top-80"
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}
           value={currInput}

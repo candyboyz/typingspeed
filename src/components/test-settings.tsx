@@ -20,7 +20,7 @@ export const TestSettings = ({ reset }: TestSettingsProps) => {
   const { time, difficult, numbers, punctuation, change } = useConfigStore();
 
   return (
-    <section className="flex flex-col items-center justify-center gap-2">
+    <section className="flex flex-col items-center justify-center gap-2 mt-8">
       <div className="flex items-center gap-1">
         <button
           onClick={() => reset(true)}

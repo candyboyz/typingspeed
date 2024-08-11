@@ -112,7 +112,11 @@ const TestText = ({
       wordsSpanRef[currWordIndex].current?.offsetLeft! <
         wordsSpanRef[currWordIndex - 1].current?.offsetLeft!
     ) {
-      wordsSpanRef[currWordIndex - 1].current?.scrollIntoView();
+      wordsSpanRef[currWordIndex - 1].current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "start",
+      });
     } else {
       return;
     }
@@ -508,7 +512,7 @@ const TestText = ({
   return (
     <>
       <section
-        className="flex flex-col justify-center"
+        className="flex flex-col justify-center mt-10"
         onClick={handleInputFocus}
         style={{ height: status !== "finished" ? "40%" : "auto" }}>
         <div className="px-2 flex max-w-[1000px] w-full mx-auto flex-col gap-2">

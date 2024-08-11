@@ -18,7 +18,7 @@ const HomePage = () => {
 
   return (
     <>
-      <main className="w-full h-[calc(100vh-80px)] max-w-[1440px] mx-auto px-4 flex flex-col">
+      <main className="w-full max-h-[calc(100vh-80px)] h-full max-w-[1440px] mx-auto px-4 flex flex-col">
         <TestText
           textInputRef={textInputRef}
           isFocusedMode={isFocusedMode}

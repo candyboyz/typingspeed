@@ -112,7 +112,7 @@ const TestText = ({
       wordsSpanRef[currWordIndex].current?.offsetLeft! <
         wordsSpanRef[currWordIndex - 1].current?.offsetLeft!
     ) {
-      // wordsSpanRef[currWordIndex - 1].current?.scrollIntoView();
+      wordsSpanRef[currWordIndex - 1].current?.scrollIntoView();
     } else {
       return;
     }

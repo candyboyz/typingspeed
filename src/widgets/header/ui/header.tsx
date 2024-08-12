@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const Header = () => {
   return (
-    <header className="h-[80px] sticky dark:bg-[#1a1a1a] top-0 max-w-[1440px] mx-auto w-full flex items-center justify-between px-4">
+    <header className="h-[80px] sticky dark:bg-[#1a1a1a] bg-white top-0 max-w-[1440px] mx-auto w-full flex items-center justify-between px-4">
       {/* Logo Start */}
       <Link href={"/"} className="flex items-center gap-2">
         <Image

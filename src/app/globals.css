@@ -6,6 +6,18 @@ body {
   @apply dark:bg-[#1a1a1a];
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type="number"],
+input[type="number"]:hover,
+input[type="number"]:focus {
+  appearance: none;
+  -moz-appearance: textfield;
+}
+
 .active-word {
   @apply border-t border-t-transparent border-b border-b-blue-400 animate-blink-underline transition-all;
 }

@@ -20,11 +20,11 @@ const config: Config = {
           "100%": { "border-right-color": "#60a5fa" },
         },
         "blink-underline": {
-          "0%": { "border-bottom": "1px solid #60a5fa" },
-          "25%": { "border-bottom": "1px solid #ffffff4d" },
-          "50%": { "border-bottom": "1px solid #60a5fa" },
-          "75%": { "border-bottom": "1px solid #ffffff4d" },
-          "100%": { "border-bottom": "1px solid #60a5fa" },
+          "0%": { "border-bottom-color": "#60a5fa" },
+          "25%": { "border-bottom-color": "#ffffff4d" },
+          "50%": { "border-bottom-color": "#60a5fa" },
+          "75%": { "border-bottom-color": "#ffffff4d" },
+          "100%": { "border-bottom-color": "#60a5fa" },
         },
       },
       animation: {
@@ -41,3 +41,11 @@ const config: Config = {
   plugins: [],
 };
 export default config;
+
+// "blink-underline": {
+//           "0%": { "border-bottom": "1px solid #60a5fa" },
+//           "25%": { "border-bottom": "1px solid #ffffff4d" },
+//           "50%": { "border-bottom": "1px solid #60a5fa" },
+//           "75%": { "border-bottom": "1px solid #ffffff4d" },
+//           "100%": { "border-bottom": "1px solid #60a5fa" },
+//         },
